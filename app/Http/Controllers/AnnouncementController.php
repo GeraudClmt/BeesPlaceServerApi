@@ -47,4 +47,27 @@ class AnnouncementController extends Controller
     {
         //
     }
+    public function delete(Request $request)
+    {
+        $request->validate(
+            [
+                'id' => 'required|integer'
+            ],
+            [
+                'id.required' => 'Le champ id est requis',
+                'id.integer' => 'Le champ id doit être un nombre entier'
+            ]
+        );
+
+        try {
+            Auth::user()->announcement()->find($request->id)->changeActive();
+            return response()->json([
+                'message' => 'Suppresion reussi'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Echec de la suppression de l\'annonce!'
+            ], 400);
+        }
+    }
 }

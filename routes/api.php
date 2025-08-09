@@ -12,4 +12,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/createannouncement', [AnnouncementController::class, 'store']);
     Route::get('/showAnnouncements', [AnnouncementController::class, 'show']);
+    Route::put('/deleteAnnouncement', [AnnouncementController::class, 'delete']);
 });

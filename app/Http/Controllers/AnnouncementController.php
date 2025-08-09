@@ -9,17 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AnnouncementController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreAnnouncementRequest $request)
     {
         $pathImg = $request['image_path']->store('announcements', 'public');
@@ -37,10 +26,6 @@ class AnnouncementController extends Controller
             'image_path' => asset('storage/' . $announcement->image_path)
         ], 200);
     }
-
-    /**
-     * Display the specified resource.
-     */
     public function show()
     {
         $announcements = Auth::user()->announcement()->get()->map(function ($announcement) {
@@ -58,19 +43,7 @@ class AnnouncementController extends Controller
             'annonces' => $announcements
         ], 200);
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Announcement $announcement)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Announcement $announcement)
     {
         //
     }

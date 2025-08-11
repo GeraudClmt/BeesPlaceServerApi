@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAnnouncementRequest;
-use App\Http\Requests\UpdateAnnoncementRequest;
+use App\Http\Requests\UpdateAnnouncementRequest;
 use App\Models\Announcement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,11 +12,11 @@ class AnnouncementController extends Controller
 {
     public function index()
     {
-        $announcements = Announcement::select(['title', 'description', 'departement', 'website', 'image_path'])->get();
+        $announcements = Announcement::where('is_active', '=', true)->select(['title', 'description', 'departement', 'website', 'image_path'])->get();
 
         return response()->json([
             'message' => 'Liste de toutes les annonces',
-            'annnouncements' => $announcements
+            'announcements' => $announcements
         ], 200);
     }
     public function store(StoreAnnouncementRequest $request)
@@ -30,12 +30,11 @@ class AnnouncementController extends Controller
             'website' => $request['website'],
             'image_path' => $pathImg
         ]);
-        $showAnnouncement = $announcement::select(['title', 'description', 'departement', 'website', 'image_path'])->get();
+        $showAnnouncement = Announcement::select(['title', 'description', 'departement', 'website', 'image_path'])->find($announcement->id);
 
         return response()->json([
             'message' => $announcement ? 'Annonce cree avec succes!' : 'Echec de la creation de l\'annonce!',
-            'id' => $showAnnouncement,
-            'image_path' => asset('storage/' . $announcement->image_path)
+            'announcement' => $showAnnouncement,
         ], 200);
     }
     public function show()
@@ -54,7 +53,7 @@ class AnnouncementController extends Controller
             'annonces' => $announcements
         ], 200);
     }
-    public function update(UpdateAnnoncementRequest $request)
+    public function update(UpdateAnnouncementRequest $request)
     {
         $announcement = Auth::user()->announcement()->find($request['id']);
         if ($announcement) {
@@ -65,9 +64,10 @@ class AnnouncementController extends Controller
                 'website' => $request['website'] ? $request['website'] : $announcement->website,
                 'image_path' => $request['image_path'] ? $request['image_path'] : $announcement->image_path
             ]);
+            $showAnnouncement = Announcement::select(['title', 'description', 'departement', 'website', 'image_path'])->find($announcement->id);
             return response()->json([
                 'message' => 'Annonce mise à jour avec succes!',
-                'new_announcement' => $announcement
+                'new_announcement' => $showAnnouncement
             ], 200);
         } else {
             return response()->json([

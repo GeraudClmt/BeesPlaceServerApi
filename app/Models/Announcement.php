@@ -19,7 +19,7 @@ class Announcement extends Model
     }
     public function changeActive()
     {
-        $this->is_active = !$this->is_active;
+        $this->is_active = false;
         $this->save();
     }
 }

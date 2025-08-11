@@ -10,6 +10,15 @@ use Illuminate\Support\Facades\Auth;
 
 class AnnouncementController extends Controller
 {
+    public function index()
+    {
+        $announcements = Announcement::select(['title', 'description', 'departement', 'website', 'image_path'])->get();
+
+        return response()->json([
+            'message' => 'Liste de toutes les annonces',
+            'annnouncements' => $announcements
+        ], 200);
+    }
     public function store(StoreAnnouncementRequest $request)
     {
         $pathImg = $request['image_path']->store('announcements', 'public');
@@ -21,10 +30,11 @@ class AnnouncementController extends Controller
             'website' => $request['website'],
             'image_path' => $pathImg
         ]);
+        $showAnnouncement = $announcement::select(['title', 'description', 'departement', 'website', 'image_path'])->get();
 
         return response()->json([
-            'message' => $announcement ? 'Annonce creee avec succes!' : 'Echec de la creation de l\'annonce!',
-            'id' => $announcement->id,
+            'message' => $announcement ? 'Annonce cree avec succes!' : 'Echec de la creation de l\'annonce!',
+            'id' => $showAnnouncement,
             'image_path' => asset('storage/' . $announcement->image_path)
         ], 200);
     }
@@ -32,7 +42,6 @@ class AnnouncementController extends Controller
     {
         $announcements = Auth::user()->announcement()->get()->map(function ($announcement) {
             return [
-                'id' => $announcement->id,
                 'title' => $announcement->title,
                 'description' => $announcement->description,
                 'departement' => $announcement->departement,

@@ -17,4 +17,9 @@ class Announcement extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function changeActive()
+    {
+        $this->is_active = false;
+        $this->save();
+    }
 }

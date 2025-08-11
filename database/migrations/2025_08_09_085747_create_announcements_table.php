@@ -22,6 +22,7 @@ return new class extends Migration
             $table->text('departement');
             $table->text('website')->nullable();
             $table->string('image_path');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

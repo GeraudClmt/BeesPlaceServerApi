@@ -7,6 +7,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Password;
 
 class AuthController extends Controller
 {
@@ -45,5 +46,37 @@ class AuthController extends Controller
     {
         Auth::user()->tokens()->delete();
         return response()->json(['message' => 'Deconnexion reussie'], 200);
+    }
+    public function forgotPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+        $status = Password::sendResetLink($request->only('email'));
+
+        return response()->json(['status' => $status], $status === Password::RESET_LINK_SENT ? 200 : 400);
+    }
+    public function resetPassword($token, Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|confirmed',
+            'token' => 'required'
+        ]);
+        $credentials = $request->only('email', 'password', 'password_confirmation', 'token');
+        $resetStatus = Password::reset($credentials, function ($user, $password) {
+            $user->password = bcrypt($password);
+            $user->save();
+        });
+
+        if ($resetStatus == Password::PASSWORD_RESET) {
+            return response()->json([
+                'message' => 'Password reset'
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Invalid token or credentials'
+            ], 400);
+        }
     }
 }

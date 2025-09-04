@@ -79,4 +79,17 @@ class AuthController extends Controller
             ], 400);
         }
     }
+    public function refresh(Request $request)
+    {
+        $refreshToken = $request->cookie(('refresh_token'));
+        if (!$refreshToken) {
+            return response()->json([
+                'message' => 'Unautohorized'
+            ], 401);
+        }
+        $token = Auth::user()->createToken('auth_token', ['user'])->plainTextToken;
+        return response()->json([
+            'access_token' => $token,
+        ], 200);
+    }
 }

@@ -28,10 +28,10 @@ class AuthController extends Controller
             Auth::user()->tokens()->delete();
             $token = Auth::user()->createToken('auth_token', ['user'])->plainTextToken;
 
-            return response()->json(['message' => 'Login successful', 'token' => $token], 200);
+            return response()->json(['message' => 'Connexion réussie', 'token' => $token], 200);
         }
 
-        return response()->json(['message' => 'Bad identification or password'], 401);
+        return response()->json(['message' => 'Mauvais identifiant ou mot de passe'], 401);
     }
     public function user(Request $request)
     {

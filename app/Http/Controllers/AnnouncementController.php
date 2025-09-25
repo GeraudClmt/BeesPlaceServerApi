@@ -12,7 +12,15 @@ class AnnouncementController extends Controller
 {
     public function index()
     {
-        $announcements = Announcement::where('is_active', '=', true)->select(['title', 'description', 'departement', 'website', 'image_path'])->get();
+        $announcements = Announcement::where('is_active', '=', true)->select(['title', 'description', 'departement', 'website', 'image_path'])->get()->map(function($announcement){
+            return [
+                'title' => $announcement->title,
+                'description' => $announcement->description,
+                'departement' => $announcement->departement,
+                'website' => $announcement->website,
+                'image_path' => asset('storage/' . $announcement->image_path)
+            ];
+        })->toArray();
 
         return response()->json([
             'message' => 'Liste de toutes les annonces',

@@ -47,8 +47,9 @@ class AnnouncementController extends Controller
     }
     public function show()
     {
-        $announcements = Auth::user()->announcement()->get()->map(function ($announcement) {
+        $announcements = Auth::user()->announcement()->where('is_active', '=', true)->get()->map(function ($announcement) {
             return [
+                'id' => $announcement->id,
                 'title' => $announcement->title,
                 'description' => $announcement->description,
                 'departement' => $announcement->departement,

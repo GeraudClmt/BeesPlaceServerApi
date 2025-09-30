@@ -24,7 +24,7 @@ class StoreAnnouncementRequest extends FormRequest
         return [
             'title' => 'required|string|max:20',
             'description' => 'required|string|max:200',
-            'departement' => 'required|string|max:20',
+            'departement' => 'required|string|min:1|max:20|in:Drome,Ardeche',
             'website' => 'string|max:200',
             'image_path' => 'required|image|max:2048',
         ];

@@ -11,8 +11,7 @@ BeesPLace API pour publier, consulter et gérer des annonces, avec authentificat
 ## Prérequis
 - PHP ^8.2
 - Composer
-- Base de données (MySQL, PostgreSQL, SQLite…)
-- Node.js & npm (optionnel pour les assets de dev)
+- Base de données (MySQL)
 
 ## Installation
 1. Cloner le dépôt et entrer dans le dossier du projet
@@ -27,7 +26,7 @@ BeesPLace API pour publier, consulter et gérer des annonces, avec authentificat
 3. Copier le fichier d'environnement et configurer
    ```bash
    cp .env.example .env
-   # Editer .env (DB_*, APP_URL, etc.)
+   # Editer .env (Acces à la base de donnée)
    ```
 4. Générer la clé d'application
    ```bash
@@ -50,9 +49,6 @@ BeesPLace API pour publier, consulter et gérer des annonces, avec authentificat
 - Connexion: renvoie un token d'accès (Sanctum Personal Access Token)
 - Pour appeler les routes protégées: ajouter l'en-tête HTTP
   `Authorization: Bearer <token>`
-
-Option de rafraîchissement:
-- `POST /api/refresh` — tente d'émettre un nouveau token à partir d'un cookie `refresh_token` (si présent)
 
 ## Endpoints
 

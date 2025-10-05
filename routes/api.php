@@ -18,5 +18,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/announcement/create', [AnnouncementController::class, 'store']);
     Route::get('/announcement/show', [AnnouncementController::class, 'show']);
     Route::post('/announcement/delete', [AnnouncementController::class, 'delete']);
-    Route::put('/announcement/update', [AnnouncementController::class, 'update']);
+    Route::post('/announcement/update', [AnnouncementController::class, 'update']);
+    Route::post('/announcement/showById', [AnnouncementController::class, 'showById']);
 });

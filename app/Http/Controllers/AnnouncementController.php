@@ -64,14 +64,18 @@ class AnnouncementController extends Controller
     }
     public function update(UpdateAnnouncementRequest $request)
     {
+        $pathImg = null;
         $announcement = Auth::user()->announcement()->find($request['id']);
+        if($request['image_path']){
+            $pathImg = $request['image_path']->store('announcements', 'public');
+        }
         if ($announcement) {
             $announcement->update([
                 'title' => $request['title'] ? $request['title'] :  $announcement->title,
                 'description' => $request['description'] ? $request['description'] : $announcement->description,
                 'departement' => $request['departement'] ? $request['departement'] : $announcement->departement,
                 'website' => $request['website'] ? $request['website'] : $announcement->website,
-                'image_path' => $request['image_path'] ? $request['image_path'] : $announcement->image_path
+                'image_path' => $pathImg != null ? $pathImg : $announcement->image_path
             ]);
             $showAnnouncement = Announcement::select(['title', 'description', 'departement', 'website', 'image_path'])->find($announcement->id);
             return response()->json([
@@ -113,5 +117,25 @@ class AnnouncementController extends Controller
                 'message' => 'Echec de la suppression de l\'annonce!'
             ], 400);
         }
+    }
+    public function showById(Request $request){
+        $request->validate(
+            [
+                'id' => 'required|integer'
+            ],
+            [
+                'id.required' => 'Le champ id est requis',
+                'id.integer' => 'Le champ id doit être un nombre entier'
+            ]
+        );
+        $announcement = Auth::user()->announcement()->find($request->id);
+
+        return response()->json([
+                'id' => $announcement->id,
+                'title' => $announcement->title,
+                'description' => $announcement->description,
+                'department' => $announcement->departement,
+                'image_path' => asset('storage/' . $announcement->image_path)
+            ], 200);
     }
 }
